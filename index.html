@@ -1,0 +1,663 @@
+<DOCTYPE html>
+<head>
+
+<link rel="stylesheet" type="text/css" href="hurkle.css">
+
+	<title>Find the Hurkle Game JavaScript Demo</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Didjiman/Matthew S. Harris Hurkle JavaScript  game>
+	<meta name="Keywords" content="Matthew Harris, Matthew S Harris, Matthew S. Harris, Didjiman, JavaScript,
+                               MS Access, MS Office, MS Excel, MS Word, VBA, Visual Basic for Applications, VB, Visual Basic, 
+                               Visual Studio, .NET, database, databases, custom software, custom calculator, 
+                               web scraping, didgeridoo, didjeridu, yidaki, yirdaki">
+	<meta name="author" content="Matthew S Harris">
+
+<script>
+
+//GLOBAL VARS
+   var turns =5;   //count of turns remaining
+   var turnsused = 0;  //count of turns used
+   //x is on the vertical axis, y is on the horizontal axis.
+   var xlocmarked=0;  //x coordinate of location marked by player
+   var ylocmarked=0;  //y coordinate of location marked by player
+   var Hurklespotx=0;  //x coordinate of hurkle hiding spot
+   var Hurklespoty=0;  //y coordinate of hurkle hiding spot
+   var isfound = false;  //flag to indicate whether hurkle has been found
+   var xlast=0;   //last x guess
+   var ylast=0;   //last y guess
+   var lastguess = "";  //string coordinates of last guess
+
+ function playerwin() {
+   var x = document.getElementById("winaudio"); 
+      x.play(); //play sound
+}
+
+ function playerlose() {
+   var x = document.getElementById("loseaudio"); 
+      x.play(); //play sound
+}
+  
+function init() {
+
+  turns=5;
+  hideHurkle();
+}
+
+
+function hideHurkle() {
+
+   //set a random location for the Hurkle
+   Hurklespotx = ((Math.random()) * 9);
+   Hurklespotx = Math.round(Hurklespotx);
+
+   Hurklespoty = ((Math.random()) * 9);
+   Hurklespoty = Math.round(Hurklespoty);
+}   //END FUNCTION hideHurkle
+
+ function playerclick(x,y) {
+//x is the vertical
+//y is the horizontal
+
+   if (isfound) {
+      //hurkle has already been found, don't process the click!
+	  alert("You have already found the Hurkle!! \nYou cannot make any more guesses! \n(refresh this page to start a new game.)");
+	  return; //bail out, no work to do
+   }
+    var xs=""; 
+	var ys = "";
+	var sid="";
+	var s=""; //scratchpad string
+	
+	//re-set the background color of the last marked square
+   if (lastguess != "") {
+   document.getElementById(lastguess).style="background-color:LightGreen;"; 
+   }  
+	
+   // decrement the number of tries remaining
+   turns = turns-1;
+   turnsused += 1;   //increment the number of tries used
+   //has player used all their turns?
+   if (turns < 0) {
+   s="You do not have any turns left! The game is over. <br>(Refresh this page to start a new game!)";
+   document.getElementById("turns").innerHTML=s;
+   document.getElementById("turns").style="font-size:26pt;color:red;text-align:center;";   
+   playerlose();
+   return;   //all 5 guesses have been used, bail out, not more work
+   }
+   s="You have made " + turnsused + " tries.";
+   s+="<br>You have " + turns + " tries left.";
+   document.getElementById("turns").innerHTML=s;
+
+   var currenttries= 5-turns;
+
+   xlocmarked = x;
+   ylocmarked= y;
+   
+   //change background color of clicked square to yellow
+   xs = String(x);
+   ys= String(y);
+   sid = xs + "," + ys;
+
+   //preserve current guess as last guess, so that the last guess square's color can be reset next guess
+   lastguess=sid;
+   
+   //highlight the current guess
+   document.getElementById(sid).style = "background-color:yellow";
+   
+// the location clicked by player is the player's guess as to the Hurkle's location
+// at this point, figure out whether the Hurkle has been found, and if not, what direction it is from the players guess
+
+  //has player found the Hurkle?
+  if (Math.abs(xlocmarked - Hurklespotx) + Math.abs(ylocmarked - Hurklespoty) == 0 ) {
+     isfound=true;  //set flag to indicate hurkle has been found.
+//     alert("THE HURKLE HAS BEEN FOUND!");
+	 s= "You found the Hurkle in " + currenttries + " guesses! <br>(Refresh this page to play again!)";
+	 document.getElementById("rpt").innerHTML = s;
+	 document.getElementById("rpt").style="font-size:24pt;text-align:center;color:green;";
+	 playerwin();
+  }
+  else {
+     //Hurkle is not yet found, where is it from where player guessed?
+	 s = "Go ";
+	 
+	 //check whether hurkle spot is north or south of guess
+	 if (x > Hurklespotx) { 
+	 s = s + " South";
+	 }
+	 else if (x < Hurklespotx) {
+	    s = s + "North"
+	 }
+	 //check whether hurkle spot is east or west of guess
+	 if (y < Hurklespoty) {
+	    s = s + "East.";
+	 }
+	 else if (y > Hurklespoty) {
+	    s = s + "West.";
+	 }
+	 //show result on board
+	 document.getElementById("rpt").innerHTML = s; 
+  }
+}   //END OF PLAYERCLICK FUNCTION
+
+</script>
+	<!-- FB stuff -->
+	<meta property="fb:admins" content="100005648886426" /> <!-- for FB analytics -->
+<!-- ELEMENTS NEEDED FOR BOTH FACEBOOK LIKE AND SHARE BUTTONS -->
+    <meta property="og:url"           content="http://www.didjiman.com/business/jsdemo/hurkle.html" />
+    <meta property="og:type"          content="website" />
+    <meta property="og:title"         content="Matthew S Harris - Find the Hurkle game (JS Demonstration Apps)"/>
+    <meta property="og:description"   content="Find the Hurkle game application by Matthew S Harris" />
+    <meta property="og:image"         content="http://www.didjiman.com/images/fbs-biz.jpg" />
+<!-- END OF FACEBOOK Stuff -->
+
+</head>
+
+<body class=GamesPageBody onload="init();">
+<!-- STUFF FOR GOOGLE ADS -->
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({
+          google_ad_client: "ca-pub-2327563481826994",
+          enable_page_level_ads: true
+     });
+</script>
+
+
+	<!-- FB stuff -->
+<div id="fb-root" style="width:20%;margin-left:auto;margin-right:auto;">
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+</div>
+
+
+<h1 style="text-align:center;">Find the Hurkle</h1>
+<!-- FB Like & Share -->
+<div style="text-align:center;">
+<div class="fb-like" data-href="http://www.didjiman.com/business/cv-swareJS.htm" data-layout="button_count" 
+data-action="like" data-size="small" data-show-faces="false" data-share="true"></div>
+</div>
+<p style="text-align:center;font-size:9pt;font-style:italic;"><strong>Page design and JavaScript code copyright &copy; 2018 by Matthew S Harris.</strong><br>
+based on a program from the book "BASIC Computer Games", published by Workman Publishing, and copyright 1978 by Creative Computing.</p>
+<div style="text-align:center;padding:10px;">
+<img src="compass.jpg" alt="compass" height="200" width="200" style="vertical-align:middle;">
+</div>
+
+
+<p style="font-size:10pt;">The Hurkle is hiding somewhere in the 10x10 grid shown below.<br><br>
+Click on a square in the grid below to guess where you think the Hurkle is hiding.<br><br> You have a total of 5 guesses to find the Hurkle.<br>
+If your guess does not find the Hurkle, text will appear underneath the grid (you may have to scroll down to see it) telling you how many guesses
+you have used, and how many you have remaining.<br> The game also gives you a compass direction, such as "Go South" or "Go North West" to 
+help you home in on the Hurkle's hiding spot.<br> HINT: make your first guess at the center of the grid (row 5, column 5), and then use the compass
+directions to home in on the Hurkle's hiding spot. With a little experience, you will discover that it is pretty easy to find the Hurkle in less
+than 5 guesses! Hope you have fun! Happy Hurkle hunting!
+</p>
+
+
+<!-- 10x10 PLAYING BOARD -->
+<table class=playboard>
+
+<tr>  <!-- ROW 9 -->
+<td id="va9" class=gridaxis>
+9</td>
+
+<td class=gridsq id="9,0" onclick="playerclick(9,0);">  <!-- COL 9,0 -->
+</td>
+
+<td class=gridsq id="9,1" onclick="playerclick(9,1);">  <!-- COL 9,1 -->
+</td>
+
+<td class=gridsq id="9,2" onclick="playerclick(9,2);">  <!-- COL 9,2 -->
+</td>
+
+<td class=gridsq id="9,3" onclick="playerclick(9,3);">  <!-- COL 9,3 -->
+</td>
+
+<td class=gridsq id="9,4" onclick="playerclick(9,4);">  <!-- COL 9,4 -->
+</td>
+
+<td class=gridsq id="9,5" onclick="playerclick(9,5);">  <!-- COL 9,5 -->
+</td>
+
+<td class=gridsq id="9,6" onclick="playerclick(9,6);">  <!-- COL 9,6 -->
+</td>
+
+<td class=gridsq id="9,7" onclick="playerclick(9,7);">  <!-- COL 9,7 -->
+</td>
+
+<td class=gridsq id="9,8" onclick="playerclick(9,8);">  <!-- COL 9,8 -->
+
+</td>
+
+<td class=gridsq id="9,9" onclick="playerclick(9,9);">  <!-- COL 9,9 -->
+
+</td>
+
+</tr>
+
+<tr>  <!-- ROW 8 -->
+<td id="va8" class=gridaxis>
+8</td>
+<td class=gridsq id="8,0" onclick="playerclick(8,0);">  <!-- COL 8,0 -->
+</td>
+<td class=gridsq id="8,1" onclick="playerclick(8,1);">  <!-- COL 8,1 -->
+
+</td>
+
+<td class=gridsq id="8,2" onclick="playerclick(8,2);">  <!-- COL 8,2 -->
+
+</td>
+
+<td class=gridsq id="8,3" onclick="playerclick(8,3);">  <!-- COL 8,3 -->
+
+</td>
+
+<td class=gridsq id="8,4" onclick="playerclick(8,4);">  <!-- COL 8,4 -->
+
+</td>
+
+<td class=gridsq id="8,5" onclick="playerclick(8,5);">  <!-- COL 8,5 -->
+
+</td>
+
+<td class=gridsq id="8,6" onclick="playerclick(8,6);">  <!-- COL 8,6 -->
+
+</td>
+
+<td class=gridsq id="8,7" onclick="playerclick(8,7);">  <!-- COL 8,7 -->
+
+</td>
+
+<td class=gridsq id="8,8" onclick="playerclick(8,8);">  <!-- COL 8,8 -->
+</td>
+
+<td class=gridsq id="8,9" onclick="playerclick(8,9);">  <!-- COL 8,9 -->
+
+</td>
+
+
+</tr>
+
+<tr>  <!-- ROW 7 -->
+<td id="va7" class=gridaxis>
+7</td>
+<td class=gridsq id="7,0" onclick="playerclick(7,0);">  <!-- COL 7,0 -->
+</td>
+<td class=gridsq id="7,1" onclick="playerclick(7,1);">  <!-- COL 7,1 -->
+
+</td>
+
+<td class=gridsq id="7,2" onclick="playerclick(7,2);">  <!-- COL 7,2 -->
+
+</td>
+
+<td class=gridsq id="7,3" onclick="playerclick(7,3);">  <!-- COL 7,3 -->
+
+</td>
+
+<td class=gridsq id="7,4" onclick="playerclick(7,4);">  <!-- COL 7,4 -->
+
+</td>
+
+<td class=gridsq id="7,5" onclick="playerclick(7,5);">  <!-- COL 7,5 -->
+
+</td>
+
+<td class=gridsq id="7,6" onclick="playerclick(7,6);">  <!-- COL 7,6 -->
+
+</td>
+
+<td class=gridsq id="7,7" onclick="playerclick(7, 7);">  <!-- COL 7,7 -->
+
+</td>
+
+<td class=gridsq id="7,8" onclick="playerclick(7,8);">  <!-- COL 7,8 -->
+
+</td>
+
+<td class=gridsq id="7,9" onclick="playerclick(7,9);">  <!-- COL 7,9 -->
+
+</td>
+</tr>
+
+<tr>  <!-- ROW 6 -->
+<td id="va6" class=gridaxis>
+6</td>
+<td class=gridsq id="6,0" onclick="playerclick(6,0);">  <!-- COL 0 -->
+
+</td>
+<td class=gridsq id="6,1" onclick="playerclick(6,1);">  <!-- COL 6,1 -->
+
+</td>
+
+<td CLASS=gridsq id="6,2" onclick="playerclick(6,2);">  <!-- COL 6,2 -->
+
+</td>
+
+<td class=gridsq id="6,3" onclick="playerclick(6,3);">  <!-- COL 6,3 -->
+
+</td>
+
+<td class=gridsq id="6,4" onclick="playerclick(6,4);">  <!-- COL 6,4 -->
+
+</td>
+
+<td class=gridsq id="6,5" onclick="playerclick(6,5);">  <!-- COL 6,5 -->
+
+</td>
+
+<td class=gridsq id="6,6" onclick="playerclick(6,6);">  <!-- COL 6,6 -->
+
+</td>
+
+<td class=gridsq id="6,7" onclick="playerclick(6,7);">  <!-- COL 6,7 -->
+
+</td>
+
+<td class=gridsq id="6,8" onclick="playerclick(6,8);">  <!-- COL 6,8 -->
+
+</td>
+
+<td class=gridsq id="6,9" onclick="playerclick(6,9);">  <!-- COL 6,9 -->
+
+</td>
+</tr>
+
+
+<tr>  <!-- ROW 5 -->
+<td id="va5" class=gridaxis>
+5</td>
+<td class=gridsq id="5,0" onclick="playerclick(5,0);">  <!-- COL 5,0 -->
+
+</td>
+<td class=gridsq id="5,1" onclick="playerclick(5,1);">  <!-- COL 5,1 -->
+
+</td>
+
+<td class=gridsq id="5,2" onclick="playerclick(5,2);">  <!-- COL 5,2 -->
+
+</td>
+
+<td class=gridsq id="5,3" onclick="playerclick(5,3);">  <!-- COL 5,3 -->
+
+</td>
+
+<td class=gridsq id="5,4" onclick="playerclick(5,4);">  <!-- COL 5,4 -->
+
+</td>
+
+<td class=gridsq id="5,5" onclick="playerclick(5,5);">  <!-- COL 5,5 -->
+
+</td>
+
+<td class=gridsq id="5,6" onclick="playerclick(5,6);">  <!-- COL 5,6 -->
+
+</td>
+
+<td class=gridsq id="5,7" onclick="playerclick(5,7);">  <!-- COL 5,7 -->
+
+</td>
+
+<td class=gridsq id="5,8" onclick="playerclick(5,8);">  <!-- COL 5,8 -->
+
+</td>
+
+<td class=gridsq id="5,9" onclick="playerclick(5,9);">  <!-- COL 5,9 -->
+
+</td>
+
+</tr>
+<tr>  <!-- ROW 4 -->
+<td id="va4" class=gridaxis>
+4</td>
+<td class=gridsq id="4,0" onclick="playerclick(4,0);">  <!-- COL 4,0 -->
+
+</td>
+
+<td class=gridsq id ="4,1" onclick="playerclick(4,1);">  <!-- COL 4,1 -->
+
+</td>
+
+<td class=gridsq id="4,2" onclick="playerclick(4,2);">  <!-- COL 4,2 -->
+
+</td>
+
+<td class=gridsq id="4,3" onclick="playerclick(4,3);">  <!-- COL 4,3 -->
+
+</td>
+
+<td class=gridsq id="4,4" onclick="playerclick(4,4);">  <!-- COL 4,4 -->
+
+</td>
+
+<td class=gridsq id="4,5" onclick="playerclick(4,5);">  <!-- COL 4,5 -->
+
+</td>
+
+<td class=gridsq id="4,6" onclick="playerclick(4,6);">  <!-- COL 4,6 -->
+
+</td>
+
+<td class=gridsq id="4,7" onclick="playerclick(4,7);">  <!-- COL 4,7 -->
+
+</td>
+
+<td class=gridsq id="4,8" onclick="playerclick(4,8);">  <!-- COL 4,8 -->
+
+</td>
+
+<td class=gridsq id="4,9" onclick="playerclick(4,9);">  <!-- COL 4,9 -->
+
+</td>
+</tr>
+<tr>  <!-- ROW 3 -->
+
+<td id="va3" class=gridaxis>
+3</td>
+<td class=gridsq id="3,0" onclick="playerclick(3,0);">  <!-- COL 3,0 -->
+
+</td>
+<td class=gridsq id="3,1" onclick="playerclick(3,1);">  <!-- COL 3,1 -->
+
+</td>
+
+<td class=gridsq id="3,2" onclick="playerclick(3,2);">  <!-- COL 3,2 -->
+
+</td>
+
+<td class=gridsq id="3,3" onclick="playerclick(3,3);">  <!-- COL 3,3 -->
+
+</td>
+
+<td class=gridsq id="3,4" onclick="playerclick(3,4);">  <!-- COL 3,4 -->
+
+</td>
+
+<td class=gridsq id="3,5" onclick="playerclick(3,5);">  <!-- COL 3,5 -->
+
+</td>
+
+<td class=gridsq id="3,6" onclick="playerclick(3,6);">  <!-- COL 3,6 -->
+
+</td>
+
+<td class=gridsq id="3,7" onclick="playerclick(3,7);"> <!-- COL 3,7 -->
+
+</td>
+
+<td class=gridsq id="3,8" onclick="playerclick(3,8);">  <!-- COL 3,8 -->
+
+</td>
+
+<td class=gridsq id="3,9" onclick="playerclick(3,9);">  <!-- COL 3,9 -->
+
+</td>
+</tr>
+<tr>  <!-- ROW 2 -->
+<td id="va2" class=gridaxis>
+2</td>
+<td class=gridsq id="2,0" onclick="playerclick(2,0);">  <!-- COL 2,0 -->
+
+</td>
+<td class=gridsq id="2,1" onclick="playerclick(2,1);">  <!-- COL 2,1 -->
+
+</td>
+
+<td class=gridsq id="2,2" onclick="playerclick(2,2);">  <!-- COL 2,2 -->
+</td>
+
+<td class=gridsq id="2,3" onclick="playerclick(2,3);">  <!-- COL 2,3 -->
+</td>
+
+<td class=gridsq id="2,4" onclick="playerclick(2,4);">  <!-- COL 2,4 -->
+</td>
+
+<td class=gridsq id="2,5" onclick="playerclick(2,5);">  <!-- COL 2,5 -->
+</td>
+
+<td class=gridsq id="2,6" onclick="playerclick(2,6);">  <!-- COL 2,6 -->
+</td>
+
+<td class=gridsq id="2,7" onclick="playerclick(2,7);"> <!-- COL 2,7 -->
+</td>
+
+<td class=gridsq id="2,8" onclick="playerclick(2,8);">  <!-- COL 2,8 -->
+</td>
+
+<td class=gridsq id="2,9" onclick="playerclick(2,9);">  <!-- COL 2,9 -->
+</td>
+</tr>
+<tr>  <!-- ROW 1 -->
+<td id="va1" class=gridaxis>
+1</td>
+<td class=gridsq id="1,0" onclick="playerclick(1,0);">  <!-- COL 1,0 -->
+
+</td>
+
+<td class=gridsq id="1,1" onclick="playerclick(1,1);">  <!-- COL 1,1 -->
+
+</td>
+
+<td class=gridsq  id="1,2" onclick="playerclick(1,2);">  <!-- COL 1,2 -->
+
+</td>
+
+<td class=gridsq id="1,3" onclick="playerclick(1,3);">  <!-- COL 1,3 -->
+
+</td>
+
+<td class=gridsq id="1,4" onclick="playerclick(1,4);">  <!-- COL 1,4 -->
+
+</td>
+
+<td class=gridsq id="1,5" onclick="playerclick(1,5);">  <!-- COL 1,5 -->
+
+</td>
+
+<td class=gridsq id="1,6" onclick="playerclick(1,6);">  <!-- COL 1,6 -->
+
+</td>
+
+<td class=gridsq id="1,7" onclick="playerclick(1,7);"> <!-- COL 1,7 -->
+
+</td>
+
+<td class=gridsq id="1,8" onclick="playerclick(1,8);">  <!-- COL 1,8 -->
+
+</td>
+
+<td class=gridsq id="1,9" onclick="playerclick(1,9);">  <!-- COL 1,9 -->
+
+</td>
+</tr>
+<tr>  <!-- ROW 0 -->
+<td id="va0" class=gridaxis>
+0</td>
+<td class=gridsq id="0,0" onclick="playerclick(0,0);">  <!-- COL 0,0 -->
+
+</td>
+<td class=gridsq id="0,1" onclick="playerclick(0,1);">  <!-- COL 0,1 -->
+
+</td>
+
+<td class=gridsq id="0,2" onclick="playerclick(0,2);">  <!-- COL 0,2 -->
+
+</td>
+
+<td class=gridsq id="0,3" onclick="playerclick(0,3);">  <!-- COL 0,3 -->
+
+</td>
+
+<td class=gridsq id="0,4" onclick="playerclick(0,4);">  <!-- COL 0,4 -->
+
+</td>
+
+<td class=gridsq id="0,5" onclick="playerclick(0,5);">  <!-- COL 0,5 -->
+
+</td>
+
+<td class=gridsq id="0,6" onclick="playerclick(0,6);">  <!-- COL 6 -->
+
+</td>
+
+<td class=gridsq id="0,7" onclick="playerclick(0,7);"> <!-- COL 7 -->
+
+</td>
+
+<td class=gridsq id="0,8" onclick="playerclick(0,8);">  <!-- COL 8 -->
+&nbsp;
+</td>
+
+<td class=gridsq id="0,9" onclick="playerclick(0,9);">  <!-- COL 9 -->
+&nbsp;
+</td>
+</tr>
+
+<tr>  <!-- AXIS ROW -->
+<td id="hacorner" class=gridaxis>
+&nbsp;</td>
+<td class=gridaxis id="ha0">  <!-- COL 0,0 -->
+0</td>
+<td class=gridaxis id="ha1">  <!-- COL 0,0 -->
+1</td>
+
+<td class=gridaxis id="ha2">  <!-- COL 0,0 -->
+2</td>
+
+<td class=gridaxis id="ha3">  <!-- COL 0,0 -->
+3</td>
+
+<td class=gridaxis id="ha4">  <!-- COL 0,0 -->
+4</td>
+
+<td class=gridaxis id="ha5">  <!-- COL 0,0 -->
+5</td>
+
+<td class=gridaxis id="ha6">  <!-- COL 0,0 -->
+6</td>
+
+<td class=gridaxis id="ha7">  <!-- COL 0,0 -->
+7</td>
+
+<td class=gridaxis id="ha8">  <!-- COL 0,0 -->
+8</td>
+
+<td class=gridaxis id="ha9">  <!-- COL 0,0 -->
+9</td>
+
+</tr>
+</table>
+<p id="turns" style="font-size:26pt;color:black;text-align:center;"></p>
+
+<p id="rpt" style="font-size:26pt;color:yellow;text-align:center;"></p>
+
+<!-- resources for end-of-game and new turn sounds -->
+<audio id="loseaudio"><source src="tttlose.mp3" type="audio/mpeg"></audio>
+<audio id="winaudio"><source src="tttwin.mp3" type="audio/mpeg"></audio>
+
+</body>
+</html>

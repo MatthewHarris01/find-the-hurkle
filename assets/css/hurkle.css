@@ -1,0 +1,48 @@
+/* CSS for Find the Hurkle game field, copyright 2018 by Matthew S Harris -- matthew@didjiman.com */
+
+body.GamesPageBody {
+	font-family: Verdana, Arial, Helvetica, sans-serif; 	
+	background-color: #C4D9F9;
+	font-weight:bold; 
+	color: black;
+	}
+
+table.playboard {
+    border-spacing: 0;
+    border-collapse: collapse;
+    border:2PX solid black;
+    width:300px;
+    height300px;
+    margin-left:auto;
+    margin-right:auto;
+    border:collapse;
+    padding:0;
+}
+
+td.gridsq	{ /* all grid squares */
+    background-color: LightGreen;
+    text-align: center;
+    color: black;
+    font-weight:bold;
+    height:30px;
+    width:30px; 
+    border-left:2px solid black;
+    border-right:2px solid black;
+    border-top:2px solid rblack;
+    border-bottom: 2px solid black;
+    cursor:pointer;
+}
+
+td.gridaxis { /* axis labels */
+    background-color: LightGray;
+    text-align: center;
+    color: black;
+    font-weight:bold;
+    height:30px;
+    width:30px; 
+    border-left:2px solid black;
+    border-right:2px solid black;
+    border-top:2px solid rblack;
+    border-bottom: 2px solid black;
+	}
+

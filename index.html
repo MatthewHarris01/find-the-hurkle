@@ -1,7 +1,7 @@
 <DOCTYPE html>
 <head>
 
-<link rel="stylesheet" type="text/css" href="hurkle.css">
+<link rel="stylesheet" type="text/css" href="assets/css/hurkle.css">
 
 	<title>Find the Hurkle Game JavaScript Demo</title>
 	<meta charset="UTF-8">
@@ -63,7 +63,7 @@ function hideHurkle() {
 	  alert("You have already found the Hurkle!! \nYou cannot make any more guesses! \n(refresh this page to start a new game.)");
 	  return; //bail out, no work to do
    }
-    var xs=""; 
+   var xs=""; 
 	var ys = "";
 	var sid="";
 	var s=""; //scratchpad string
@@ -184,7 +184,7 @@ data-action="like" data-size="small" data-show-faces="false" data-share="true"><
 <p style="text-align:center;font-size:9pt;font-style:italic;"><strong>Page design and JavaScript code copyright &copy; 2018 by Matthew S Harris.</strong><br>
 based on a program from the book "BASIC Computer Games", published by Workman Publishing, and copyright 1978 by Creative Computing.</p>
 <div style="text-align:center;padding:10px;">
-<img src="compass.jpg" alt="compass" height="200" width="200" style="vertical-align:middle;">
+<img src="assets/images/compass.jpg" alt="compass" height="100" width="100" style="vertical-align:middle;">
 </div>
 
 
@@ -651,13 +651,13 @@ than 5 guesses! Hope you have fun! Happy Hurkle hunting!
 
 </tr>
 </table>
-<p id="turns" style="font-size:26pt;color:black;text-align:center;"></p>
+<p id="turns" class="turnsreport" style="font-size:26pt;color:black;text-align:center;"></p>
 
 <p id="rpt" style="font-size:26pt;color:yellow;text-align:center;"></p>
 
 <!-- resources for end-of-game and new turn sounds -->
-<audio id="loseaudio"><source src="tttlose.mp3" type="audio/mpeg"></audio>
-<audio id="winaudio"><source src="tttwin.mp3" type="audio/mpeg"></audio>
+<audio id="loseaudio"><source src="assets/sounds/lose.mp3" type="audio/mpeg"></audio>
+<audio id="winaudio"><source src="assets/sounds/win.mp3" type="audio/mpeg"></audio>
 
 </body>
 </html>
